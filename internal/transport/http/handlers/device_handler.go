@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -10,6 +9,8 @@ import (
 	"ect-borrow-be/internal/repository"
 	"ect-borrow-be/internal/usecase"
 )
+
+// writeJSON is a helper function to write a JSON response.
 
 type DeviceHandler struct {
 	uc usecase.DeviceUsecase
@@ -45,13 +46,7 @@ func (h *DeviceHandler) GetDevices(w http.ResponseWriter, r *http.Request) {
 
 	writeJSON(w, http.StatusOK, dto.APIResponse[dto.DevicesData]{
 		Data:  &data,
-		Meta:  nil, // keep top-level meta null per spec
+		Meta:  nil, // top-level meta เป็น null ตามสเปคหน้า devices
 		Error: nil,
 	})
-}
-
-func writeJSON(w http.ResponseWriter, status int, v any) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(status)
-	_ = json.NewEncoder(w).Encode(v)
 }

@@ -1,0 +1,81 @@
+# =========================
+# Go build artifacts
+# =========================
+bin/
+build/
+dist/
+out/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries (go test -c)
+*.test
+
+# =========================
+# Coverage / profiles
+# =========================
+*.out
+*.cov
+*.coverprofile
+coverage/
+profile.cov
+coverage.txt
+
+# =========================
+# Go modules / workspace
+# =========================
+# ปกติควร commit go.mod และ go.sum
+# แต่ไม่จำเป็นต้อง commit go.work*
+go.work
+go.work.sum
+
+# ถ้าใช้ vendoring และ "ไม่อยาก" commit โฟลเดอร์ vendor ให้ uncomment บรรทัดด้านล่าง
+# vendor/
+
+# =========================
+# Tools / Temp / Caches
+# =========================
+.tmp/
+tmp/
+.cache/
+*.log
+*.tmp
+*.swp
+
+# air (live reload) มักสร้างโฟลเดอร์ tmp
+# ถ้ามีไฟล์ config .air.toml อยากเก็บไว้ ก็ควรไม่ ignore ไฟล์นั้น
+.air/
+.air-*
+tmp/*
+
+# =========================
+# IDE / OS cruft
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# =========================
+# Docker / Env / Secrets
+# =========================
+.env
+.env.*
+*.key
+*.pem
+*.crt
+*.p12
+*.cer
+*.der
+*.jks
+*.keystore
+service-account.json
+ect-borrow-credential.json
+
+# =========================
+# Merge/patch leftovers
+# =========================
+*.orig

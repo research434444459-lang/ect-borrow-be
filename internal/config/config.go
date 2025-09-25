@@ -1,28 +1,27 @@
 package config
 
-import (
-	"os"
-)
+import "os"
 
 type Config struct {
-	Port                 string
-	SheetID              string
-	SheetTab             string
-	GoogleAppCredentials string // for GOOGLE_APPLICATION_CREDENTIALS, optional
-	Subtitle             string // for data.meta.subtitle, default: "ดูรายการอุปกรณ์"
-	ReadyStatus          string // ค่าที่คอลัมน์ E ต้องเท่ากับ (default: "พร้อมใช้งาน")
+	Port string
+
+	SheetID           string
+	SheetTabInventory string // "Inventory"
+	SheetTabRequests  string // "การตอบแบบฟอร์ม 1"
+
+	Subtitle    string // /api/devices
+	ReadyStatus string // /api/devices
 }
 
 func Load() Config {
-	c := Config{
-		Port:                 valueOr("PORT", "8080"),
-		SheetID:              valueOr("SHEET_ID", "1VygRdp0QzE3iHBeCwaC1l7crHa8CfDMCWmyq5XRB_NY"),
-		SheetTab:             valueOr("SHEET_TAB", "Inventory"),
-		Subtitle:             valueOr("DEVICES_SUBTITLE", "ดูรายการอุปกรณ์"),
-		GoogleAppCredentials: valueOr("GOOGLE_APPLICATION_CREDENTIALS", "/ect-borrow-be/internal/config/ect-borrow-credential.json"), // no default, optional
-		ReadyStatus:          valueOr("READY_STATUS", "พร้อมใช้งาน"),
+	return Config{
+		Port:              valueOr("PORT", "8080"),
+		SheetID:           valueOr("SHEET_ID", ""),
+		SheetTabInventory: valueOr("SHEET_TAB_INVENTORY", "Inventory"),
+		SheetTabRequests:  valueOr("SHEET_TAB_REQUESTS", "การตอบแบบฟอร์ม 1"),
+		Subtitle:          valueOr("DEVICES_SUBTITLE", "ดูรายการอุปกรณ์"),
+		ReadyStatus:       valueOr("READY_STATUS", "พร้อมใช้งาน"),
 	}
-	return c
 }
 
 func valueOr(key, def string) string {
