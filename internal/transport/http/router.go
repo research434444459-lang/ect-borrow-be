@@ -3,6 +3,7 @@ package transport
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 
@@ -21,6 +22,7 @@ type sheetsProvider interface {
 
 func NewRouter(repo repository.Repository, cfg config.Config) http.Handler {
 	r := chi.NewRouter()
+	r.Use(corsMiddleware(cfg))
 
 	// ===== routes เดิม =====
 	devices := handlers.NewDeviceHandler(repo, cfg)
@@ -68,4 +70,42 @@ func NewRouter(repo repository.Repository, cfg config.Config) http.Handler {
 	})
 
 	return r
+	
+}
+func corsMiddleware(cfg config.Config) func(http.Handler) http.Handler {
+	// รองรับหลาย origin ได้: แยกด้วยจุลภาคใน ENV ถ้าต้องการ
+	// เช่น FRONTEND_ORIGIN="http://localhost:4200,https://app.example.com"
+	allowed := map[string]struct{}{}
+	for _, o := range strings.Split(cfg.FrontendOrigin, ",") {
+		o = strings.TrimSpace(o)
+		if o != "" {
+			allowed[o] = struct{}{}
+		}
+	}
+	// กันพลาด: เผื่อค่า default dev
+	if len(allowed) == 0 {
+		allowed["http://localhost:4200"] = struct{}{}
+	}
+
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			origin := r.Header.Get("Origin")
+			if _, ok := allowed[origin]; ok {
+				// ถ้าจะใช้ credential (cookies/authorization) ต้อง “สะท้อน origin ตรงๆ”
+				w.Header().Set("Access-Control-Allow-Origin", origin)
+				w.Header().Set("Vary", "Origin") // ให้ cache-aware
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+				w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
+			}
+
+			// preflight
+			if r.Method == http.MethodOptions {
+				w.WriteHeader(http.StatusNoContent)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
 }
