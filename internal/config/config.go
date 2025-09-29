@@ -24,7 +24,7 @@ func Load() Config {
 		SheetTabRequests:  valueOr("SHEET_TAB_REQUESTS", "การตอบแบบฟอร์ม 1"),
 		Subtitle:          valueOr("DEVICES_SUBTITLE", "ดูรายการอุปกรณ์"),
 		ReadyStatus:       valueOr("READY_STATUS", "พร้อมใช้งาน"),
-		FrontendOrigin:    valueOr("FRONTEND_ORIGIN", "http://localhost:4200"),
+		FrontendOrigin:    valueOr("FRONTEND_ORIGIN", "https://ect-borrow.pages.dev"),
 	}
 }
 
