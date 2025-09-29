@@ -19,7 +19,7 @@ type Config struct {
 func Load() Config {
 	return Config{
 		Port:              valueOr("PORT", "8080"),
-		SheetID:           valueOr("SHEET_ID", ""),
+		SheetID:           valueOr("SHEET_ID", "1VygRdp0QzE3iHBeCwaC1l7crHa8CfDMCWmyq5XRB_NY"),
 		SheetTabInventory: valueOr("SHEET_TAB_INVENTORY", "Inventory"),
 		SheetTabRequests:  valueOr("SHEET_TAB_REQUESTS", "การตอบแบบฟอร์ม 1"),
 		Subtitle:          valueOr("DEVICES_SUBTITLE", "ดูรายการอุปกรณ์"),
